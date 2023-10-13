@@ -1,16 +1,13 @@
 import React from 'react';
+import TodoList from './TodoList'; // Importing the TodoList component
+import AddTodoForm from './AddTodoForm'; // Importing the AddTodoForm component
 
 function App() {
   return (
-    <div style={{ textAlign: 'center' }}>
-      <header>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>ToDo List</h1>
+      <AddTodoForm /> {/* Using the AddTodoForm component*/}
+      <TodoList /> {/* Using the TodoList component*/}
     </div>
   );
 }
