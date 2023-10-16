@@ -1,14 +1,20 @@
-import React from "react";
+import React from 'react';
 
-const AddTodoForm = () => {
+const AddTodoForm = (props) => {
+    const handleAddTodo = (event) => {
+        event.preventDefault(); //prevent form from refreshing
+        const todoTitle = event.target.title.value;
+        props.onAddTodo(todoTitle);
+        event.target.reset();   //reset the form after submission
+        console.log(todoTitle);
+    };
+
     return (
-        <div>
-            <form>
-                <label htmlFor="todoTitle">Title</label>
-                <input type="text" id="todoTitle" />
-                <button type="submit">Add</button>
-            </form>
-        </div>
+        <form onSubmit={handleAddTodo}>
+            <label htmlFor="todoTitle">Title</label>
+            <input id="todoTitle" name="title" />
+            <button>Add</button>
+        </form>
     );
 };
 

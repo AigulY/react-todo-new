@@ -1,15 +1,21 @@
+
 import React from 'react';
-import TodoList from './TodoList'; // Importing the TodoList component
-import AddTodoForm from './AddTodoForm'; // Importing the AddTodoForm component
+import TodoList from './TodoList';
+import AddTodoForm from './AddTodoForm';
 
 function App() {
-  return (
-    <div>
-      <h1>ToDo List</h1>
-      <AddTodoForm /> {/* Using the AddTodoForm component*/}
-      <TodoList /> {/* Using the TodoList component*/}
-    </div>
-  );
+    const [newTodo, setNewTodo] = React.useState("");
+
+    return (
+        <div>
+            <header>
+                <h1>To do list</h1>
+                <AddTodoForm onAddTodo={setNewTodo} />
+                <p>{newTodo}</p>
+                <TodoList />
+            </header>
+        </div>
+   );
 }
 
 export default App;
