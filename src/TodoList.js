@@ -1,38 +1,28 @@
 import React from 'react';
+import TodoListItem from './TodoListItem';
 
-function TodoList() {
-    const todoListData = [
-        {
-            id: 1,
-            title: 'Complete assignment',
-            assignment_number: '_1_2'
-        },
-        {
-            id: 2,
-            title: 'Git push assignment',
-            assignment_number: '_1_2'
-        },
-        {
-            id: 3,
-            title: 'Merge assignment',
-            assignment_number: '_1_2'
-        },
-    ];
+const todoListData = [
+    {
+        id: 1,
+        title: 'Complete assignment',
+    },
+    {
+        id: 2,
+        title: 'Git push assignment',
+    },
+    {
+        id: 3,
+        title: 'Merge assignment',
+    },
+];
 
+const TodoList = () => {
     return (
-        <div>
-            <h2>Todo List</h2>
-            <ul>
-                {todoListData.map(function (item) {
-                    return (
-                        <li key={item.id}>
-                            <span>{item.title}</span>
-                            <span>{item.assignment_number}</span>
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
+        <ul>
+            {todoListData.map(function (item) {
+                return <TodoListItem key={item.id} item={item} />;
+            })}
+        </ul>
     );
 }
 
