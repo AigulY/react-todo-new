@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const AddTodoForm = ({ onAddTodo }) => {
+const AddTodoForm = ({ onAddTodo }) => { // Destructuring the props
+    const [todoTitle, setTodoTitle] = useState(''); 
+
+    const handleTitleChange = (event) => {
+        const newTodoTitle = event.target.value;
+        setTodoTitle(newTodoTitle);
+    };
+
     const handleAddTodo = (event) => {
-        event.preventDefault(); //prevent form from refreshing
-        const todoTitle = event.target.title.value;
-        onAddTodo(todoTitle);
-        event.target.reset();   //reset the form after submission
-        console.log(todoTitle);
+        event.preventDefault();
+        const newTodo = {
+            title: todoTitle,
+            id: Date.now(), // generate unique identifier
+        };
+        onAddTodo(newTodo); 
+        setTodoTitle(''); //logic to reset the todoTitle state to an empty String
     };
 
     return (
         <form onSubmit={handleAddTodo}>
             <label htmlFor="todoTitle">Title</label>
-            <input type="text" id="todoTitle" name="title" />
+            <input 
+                type="text"
+                id="todoTitle"
+                name="title"
+                value={todoTitle}
+                onChange={handleTitleChange}
+            />
             <button type="submit">Add</button>
         </form>
     );
