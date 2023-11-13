@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AddTodoForm = ({ onAddTodo }) => { // Destructuring the props
+const AddTodoForm = ({ onAddTodo }) => { 
     const [todoTitle, setTodoTitle] = useState(''); 
 
     const handleTitleChange = (event) => {
@@ -12,10 +12,10 @@ const AddTodoForm = ({ onAddTodo }) => { // Destructuring the props
         event.preventDefault();
         const newTodo = {
             title: todoTitle,
-            id: Date.now(), // generate unique identifier
+            id: Date.now(),
         };
         onAddTodo(newTodo); 
-        setTodoTitle(''); //logic to reset the todoTitle state to an empty String
+        setTodoTitle('');
     };
 
     return (
