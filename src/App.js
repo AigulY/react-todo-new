@@ -4,16 +4,14 @@ import AddTodoForm from './AddTodoForm';
 
 function App() { 
     const key = 'savedTodoList'
-    //const initialState = []
-
-    //const savedState = JSON.parse(localStorage.getItem(key)) || initialState;  
-    const [todoList, setTodoList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true)
+    const savedState = JSON.parse(localStorage.getItem(key)) || [];
+    const [todoList, setTodoList] = useState(savedState);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         new Promise ((resolve, reject) => {
             setTimeout(() => {
-                resolve({ data: { todoList:[] }}) 
+                resolve({ data: { todoList: savedState } }) //Loading the data from the saved state
             }, 2000)
         })
         .then(result => {
@@ -23,10 +21,8 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if(!isLoading) {
-            localStorage.setItem(key, JSON.stringify(todoList));
-        }
-    }, [todoList, isLoading])
+        localStorage.setItem(key, JSON.stringify(todoList));
+    }, [todoList]);
 
      const addTodo = (newTodo) => {
         setTodoList([...todoList, newTodo]);
