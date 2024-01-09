@@ -13,7 +13,7 @@ const AddTodoForm = ({ onAddTodo }) => {
         event.preventDefault();
         const newTodo = {
             title: todoTitle,
-            id: Date.now(),
+            //id: Date.now(),
         };
         onAddTodo(newTodo); 
         setTodoTitle('');
