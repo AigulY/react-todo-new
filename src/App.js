@@ -4,11 +4,9 @@ import AddTodoForm from './AddTodoForm';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() { 
-    const key = 'savedTodoList'
-    const savedState = JSON.parse(localStorage.getItem(key)) || [];
-    const [todoList, setTodoList] = useState(savedState);
+    const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [completionMessage, setCompletionMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const fetchData = async () => {
         const options = {
@@ -28,19 +26,19 @@ function App() {
             }
             const data = await response.json();                                                                                                                                                                                                            
 
-            const todos = data.records.map((record) => ({
+            const todos = data.records ? data.records.map((record) => ({
                 id: record.id,
                 title: record.fields.title
-            }))
+            })) : [];
             
-            setTodoList(todos)
+            setTodoList([...todos]);
             setIsLoading(false);
 
         } catch (error) {
             console.error("Fetch error:", error);
             setIsLoading(false);
-            setCompletionMessage("Error fetching data: " + error.message);
-            setTimeout(() => setCompletionMessage(""), 3000);
+            setErrorMessage("Error fetching data: " + error.message);
+            setTimeout(() => setErrorMessage(""), 3000);
         }
     };
 
@@ -49,14 +47,9 @@ function App() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(todoList));
-    }, [todoList]);
-
      const addTodo = (newTodo) => {
         setTodoList([...todoList, newTodo]);
     };
-
     const removeTodo = (id) => {
         const updatedTodoList = todoList.filter(todo => todo.id !== id);
         setTodoList(updatedTodoList);
@@ -70,7 +63,7 @@ function App() {
                         <h1>Todo list</h1>
                         <AddTodoForm onAddTodo={addTodo} />
                         {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-                        {completionMessage && <p>{completionMessage}</p>}
+                        {errorMessage && <p>{errorMessage}</p>}
                     </header>
                 } />
                 <Route path="/new" element={
