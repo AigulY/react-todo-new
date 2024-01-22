@@ -3,6 +3,25 @@ import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+function HomePage({ addTodo, isLoading, todoList, removeTodo, errorMessage }) {
+    return (
+        <header>
+            <h1>Todo list</h1>
+            <AddTodoForm onAddTodo={addTodo} />
+            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+            {errorMessage && <p>{errorMessage}</p>}
+        </header>
+    );
+}
+
+function NewTodo() {
+    return (
+        <header>
+            <h1>New Todo List</h1>
+        </header>
+    );
+}
+
 function App() { 
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +61,6 @@ function App() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -59,18 +77,15 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={
-                    <header>
-                        <h1>Todo list</h1>
-                        <AddTodoForm onAddTodo={addTodo} />
-                        {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-                        {errorMessage && <p>{errorMessage}</p>}
-                    </header>
+                    <HomePage 
+                        addTodo={addTodo} 
+                        isLoading={isLoading} 
+                        todoList={todoList} 
+                        removeTodo={removeTodo} 
+                        errorMessage={errorMessage} 
+                    />
                 } />
-                <Route path="/new" element={
-                    <header>
-                    <h1>New Todo List</h1>
-                    </header>
-                } />
+                <Route path="/new" element={<NewTodo />} />
             </Routes>
         </BrowserRouter>
     );
