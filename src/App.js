@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+function HomePage({ addTodo, isLoading, todoList, removeTodo, errorMessage }) {
+    return (
+        <header>
+            <h1>Todo list</h1>
+            <AddTodoForm onAddTodo={addTodo} />
+            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+            {errorMessage && <p>{errorMessage}</p>}
+        </header>
+    );
+}
+
+function NewTodo() {
+    return (
+        <header>
+            <h1>New Todo List</h1>
+        </header>
+    );
+}
 
 function App() { 
     const [todoList, setTodoList] = useState([]);
@@ -41,7 +61,6 @@ function App() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -49,21 +68,26 @@ function App() {
      const addTodo = (newTodo) => {
         setTodoList([...todoList, newTodo]);
     };
-
     const removeTodo = (id) => {
         const updatedTodoList = todoList.filter(todo => todo.id !== id);
         setTodoList(updatedTodoList);
     }
 
     return (
-        <>
-            <header>
-                <h1>To do list</h1>
-                <AddTodoForm onAddTodo={addTodo} />
-                {isLoading ?<p>loading...</p>: <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-                {errorMessage && <p>{errorMessage}</p>}
-            </header>
-        </>
-   );
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={
+                    <HomePage 
+                        addTodo={addTodo} 
+                        isLoading={isLoading} 
+                        todoList={todoList} 
+                        removeTodo={removeTodo} 
+                        errorMessage={errorMessage} 
+                    />
+                } />
+                <Route path="/new" element={<NewTodo />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 export default App;
