@@ -3,26 +3,48 @@ import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
 function App() { 
-    const key = 'savedTodoList'
-    const savedState = JSON.parse(localStorage.getItem(key)) || [];
-    const [todoList, setTodoList] = useState(savedState);
+    const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-        new Promise ((resolve, reject) => {
-            setTimeout(() => {
-                resolve({ data: { todoList: savedState } }) //Loading the data from the saved state
-            }, 2000)
-        })
-        .then(result => {
-            setTodoList(result.data.todoList)
+    const fetchData = async () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                Authorization:`Bearer ${process.env.REACT_APP_AIRTABLE_API_TOKEN}`
+            }};
+
+            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+
+        try {
+            const response = await fetch(url, options);
+
+            if (!response.ok) {
+                const message = `Error: ${response.status}`;
+                throw new Error(message);
+            }
+            const data = await response.json();                                                                                                                                                                                                            
+
+            const todos = data.records ? data.records.map((record) => ({
+                id: record.id,
+                title: record.fields.title
+            })) : [];
+            
+            setTodoList([...todos]);
             setIsLoading(false);
-        })
-    }, []);
+
+        } catch (error) {
+            console.error("Fetch error:", error);
+            setIsLoading(false);
+            setErrorMessage("Error fetching data: " + error.message);
+            setTimeout(() => setErrorMessage(""), 3000);
+        }
+    };
+
 
     useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(todoList));
-    }, [todoList]);
+        fetchData();
+    }, []);
 
      const addTodo = (newTodo) => {
         setTodoList([...todoList, newTodo]);
@@ -38,10 +60,10 @@ function App() {
             <header>
                 <h1>To do list</h1>
                 <AddTodoForm onAddTodo={addTodo} />
-                {isLoading ?<p>loading...</p>: <TodoList todoList={todoList} onRemoveTodo={removeTodo} />} 
+                {isLoading ?<p>loading...</p>: <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+                {errorMessage && <p>{errorMessage}</p>}
             </header>
         </>
    );
 }
-
 export default App;
