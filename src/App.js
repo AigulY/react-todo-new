@@ -3,11 +3,9 @@ import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
 function App() { 
-    const key = 'savedTodoList'
-    const savedState = JSON.parse(localStorage.getItem(key)) || [];
-    const [todoList, setTodoList] = useState(savedState);
+    const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [completionMessage, setCompletionMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const fetchData = async () => {
         const options = {
@@ -27,19 +25,19 @@ function App() {
             }
             const data = await response.json();                                                                                                                                                                                                            
 
-            const todos = data.records.map((record) => ({
+            const todos = data.records ? data.records.map((record) => ({
                 id: record.id,
                 title: record.fields.title
-            }))
+            })) : [];
             
-            setTodoList(todos)
+            setTodoList([...todos]);
             setIsLoading(false);
 
         } catch (error) {
             console.error("Fetch error:", error);
             setIsLoading(false);
-            setCompletionMessage("Error fetching data: " + error.message);
-            setTimeout(() => setCompletionMessage(""), 3000);
+            setErrorMessage("Error fetching data: " + error.message);
+            setTimeout(() => setErrorMessage(""), 3000);
         }
     };
 
@@ -47,10 +45,6 @@ function App() {
     useEffect(() => {
         fetchData();
     }, []);
-
-    useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(todoList));
-    }, [todoList]);
 
      const addTodo = (newTodo) => {
         setTodoList([...todoList, newTodo]);
@@ -67,7 +61,7 @@ function App() {
                 <h1>To do list</h1>
                 <AddTodoForm onAddTodo={addTodo} />
                 {isLoading ?<p>loading...</p>: <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-                {completionMessage && <p>{completionMessage}</p>}
+                {errorMessage && <p>{errorMessage}</p>}
             </header>
         </>
    );
