@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const InputWithLabel = ({ id, type, name, value, onChange, children }) => {
+const InputWithLabel = ({ id, type, name, value, onChange, placeholder, children }) => {
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -16,6 +16,7 @@ const InputWithLabel = ({ id, type, name, value, onChange, children }) => {
                 name={name}
                 value={value}
                 onChange={onChange}
+                placeholder={placeholder}
                 ref={inputRef}
             />
         </>

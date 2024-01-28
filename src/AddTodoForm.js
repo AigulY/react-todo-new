@@ -11,11 +11,7 @@ const AddTodoForm = ({ onAddTodo }) => {
 
     const handleAddTodo = (event) => {
         event.preventDefault();
-        const newTodo = {
-            title: todoTitle,
-            id: Date.now(),
-        };
-        onAddTodo(newTodo); 
+        onAddTodo(todoTitle); 
         setTodoTitle('');
     };
 
@@ -27,10 +23,10 @@ const AddTodoForm = ({ onAddTodo }) => {
                 name="title"
                 value={todoTitle}
                 onChange={handleTitleChange}
+                placeholder="Please add Todo Task"
             >
-                Title
             </InputWithLabel>
-            <button type="submit">Add</button>
+            <button type="submit">Add Task</button>
         </form>
     );
 };

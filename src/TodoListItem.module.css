@@ -1,0 +1,30 @@
+.ListItem {
+    background-color: #111728ee;
+    border: 1px solid #b8b8b97e;
+    padding: 10px 15px;
+    margin-bottom: 13px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.removeButton {
+    background-color: transparent;
+    border: none;
+    color: rgba(197, 2, 2, 0.73);
+    cursor: pointer;
+}
+
+.removeButton:hover {
+    color: red;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.actions input[type="checkbox"] {
+    margin-right: 1px;
+}
