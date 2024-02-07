@@ -1,6 +1,6 @@
 body {
-    margin: 10px;
-    padding: 200px;
+    margin: 0.5rem;
+    padding: 13rem;
     background-color: #fff;
     color: #929191;
     font-family: 'Segoe UI', 'Arial', sans-serif;
@@ -12,7 +12,7 @@ body {
 
 h1 {
     color: #b8b8b9;
-    margin-bottom: 20px;
+    margin-bottom: 10rem;
 }
 
 button {
@@ -20,24 +20,24 @@ button {
     background-color: #064ee8;
     color: white;
     border: none;
-    padding: 6px 15px;
-    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.6rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-left: 20px;
+    margin-left: 1%;
 }
 
 input {
     font-size: 1rem;
-    padding: 13px 90px;
-    border-radius: 15px;
-    margin-left: 40px;
-    border: 1px solid #ddd;
+    padding: 0.9rem 15%;
+    border-radius: 0.8rem;
+    margin-left: 11%;
+    border: 0.1rem solid #ddd;
 }
 
 @media (max-width: 600px) {
     body {
-        font-size: 14px;
-        padding: 10px;
+        font-size: 1rem;
+        padding: 1rem;
     }
 }

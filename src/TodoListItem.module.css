@@ -1,12 +1,15 @@
 .ListItem {
     background-color: #111728ee;
-    border: 1px solid #b8b8b97e;
-    padding: 10px 15px;
-    margin-bottom: 13px;
-    border-radius: 15px;
+    border: 0.1rem solid #b8b8b97e;
+    padding: 0.5rem 2rem;
+    margin-bottom: 0.7rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 90%;
 }
 
 .removeButton {
@@ -26,5 +29,5 @@
 }
 
 .actions input[type="checkbox"] {
-    margin-right: 1px;
+    margin-right: 20%;
 }
