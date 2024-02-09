@@ -8,6 +8,7 @@ const TodoContainer = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
 
     const displayErrorMessage = (message) => {
         setErrorMessage(message);
@@ -28,9 +29,9 @@ const TodoContainer = () => {
                 Authorization:`Bearer ${process.env.REACT_APP_AIRTABLE_API_TOKEN}`
             }};
 
-            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=title&sort[0][direction]=asc`;
+            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=title&sort[0][direction]=asc`;
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?view=Grid%20view`;
-            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
         try {
             const response = await fetch(url, options);
@@ -40,11 +41,15 @@ const TodoContainer = () => {
             }
             const data = await response.json();                                                                                                                                                                                                            
 
-            const todos = data.records ? data.records.map((record) => ({
+            const todos = data.records.sort((a, b) => {
+                if (a.fields.title.toLowerCase() < b.fields.title.toLowerCase()) return 1;
+                if (a.fields.title.toLowerCase() > b.fields.title.toLowerCase()) return -1;
+                return 0;
+            }).map(record => ({
                 id: record.id,
                 title: record.fields.title,
                 isCompleted: record.fields.isCompleted || false
-            })) : [];
+            }));
             
             setTodoList([...todos]);
             setIsLoading(false);
