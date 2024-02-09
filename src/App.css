@@ -43,7 +43,7 @@ input {
     z-index: 1000; 
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
     pointer-events: none; 
 }
 

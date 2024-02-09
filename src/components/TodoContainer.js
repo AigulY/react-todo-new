@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 const TodoContainer = () => {
     const [todoList, setTodoList] = useState([]);
@@ -31,7 +31,8 @@ const TodoContainer = () => {
 
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=title&sort[0][direction]=asc`;
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?view=Grid%20view`;
-            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=dueDate&sort[0][direction]=${sortOrder}`;
 
         try {
             const response = await fetch(url, options);
@@ -41,11 +42,7 @@ const TodoContainer = () => {
             }
             const data = await response.json();                                                                                                                                                                                                            
 
-            const todos = data.records.sort((a, b) => {
-                if (a.fields.title.toLowerCase() < b.fields.title.toLowerCase()) return 1;
-                if (a.fields.title.toLowerCase() > b.fields.title.toLowerCase()) return -1;
-                return 0;
-            }).map(record => ({
+            const todos = data.records.map(record => ({
                 id: record.id,
                 title: record.fields.title,
                 isCompleted: record.fields.isCompleted || false
@@ -167,14 +164,19 @@ const TodoContainer = () => {
             displayErrorMessage("Error updating todo. Please try again.");
         }
     }
+    
+    const toggleSortOrder = () => {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [sortOrder]);
 
     return (
         <section>
             <AddTodoForm onAddTodo={addTodo} />
+            <button onClick={toggleSortOrder}>Sort task by Due Date</button>
             {isLoading ? <p>Loading...</p> : 
                 <TodoList 
                     todoList={todoList} 
