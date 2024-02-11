@@ -1,8 +1,16 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styles from './TodoListItem.module.css';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 const TodoListItem = ({ item, onRemoveTodo, onToggleTodoCompletion }) => { 
+    const navigate = useNavigate();
+
+    const handleUpdateClick = () => {
+        navigate(`/update/${item.id}`);
+    };
     return (
         <li className={styles.ListItem}>
             <span className={styles.taskContent}>
@@ -17,6 +25,9 @@ const TodoListItem = ({ item, onRemoveTodo, onToggleTodoCompletion }) => {
                     checked={item.isCompleted} 
                     onChange={() => onToggleTodoCompletion(item.id)} 
                 />
+                <button type="editButton"onClick={handleUpdateClick} className={styles.updateButton}>
+                    <FontAwesomeIcon icon={faPen} />
+                </button>
                 <button type="button" onClick={() => onRemoveTodo(item.id)} className={styles.removeButton}>
                     <i className="fas fa-trash"></i>
                 </button>

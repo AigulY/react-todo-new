@@ -3,7 +3,9 @@ import Header from './Header';
 import TodoContainer from './components/TodoContainer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Notification from './components/AlertMessage';
+import TodoUpdateForm from './components/TodoUpdateForm';
 import './App.css';
+
 
 function App() {
     const [notification, setNotification] = useState({ message: '', type: '' });
@@ -32,6 +34,7 @@ function App() {
                         <h1>New Todo List</h1>
                     </header>
                 } />
+            <Route path="/update/:id" element={<TodoUpdateForm />} />
             </Routes>
         </BrowserRouter>
       );
