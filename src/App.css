@@ -103,8 +103,8 @@ button {
     padding: 0.5rem;
     border-radius: 0.8rem;
     border: 0.1rem solid #dddddd;
-    cursor: pointer; /* Changes the cursor to indicate it's clickable */
-    background-color: #929191; /* Matches the input field background */
+    cursor: pointer;
+    background-color: #929191; 
 }
 
 @media (max-width: 600px) {

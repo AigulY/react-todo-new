@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import AlertMessage from './AlertMessage'; 
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
-// import PropTypes from 'prop-types';
 
 const TodoContainer = () => {
     const [todoList, setTodoList] = useState([]);
@@ -13,17 +13,9 @@ const TodoContainer = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [sortField, setSortField] = useState('title');
 
-    const displayErrorMessage = (message) => {
-        setErrorMessage(message);
-        const timeoutId = setTimeout(() => setErrorMessage(''), 3000);
-        return () => clearTimeout(timeoutId);
-    };
-
-    const displaySuccessMessage = (message) => {
-        setSuccessMessage(message);
-        const timeoutId = setTimeout(() => setSuccessMessage(''), 3000);
-        return () => clearTimeout(timeoutId);
-    }
+    useEffect(() => {
+        fetchData();
+    }, [sortField, sortOrder]);
 
     const fetchData = async () => {
         const options = {
@@ -32,10 +24,6 @@ const TodoContainer = () => {
                 Authorization:`Bearer ${process.env.REACT_APP_AIRTABLE_API_TOKEN}`
             }};
 
-            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=title&sort[0][direction]=asc`;
-            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?view=Grid%20view`;
-            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=dueDate&sort[0][direction]=${sortOrder}`;
             const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=${sortField}&sort[0][direction]=${sortOrder}`;
         try {
             const response = await fetch(url, options);
@@ -57,9 +45,8 @@ const TodoContainer = () => {
 
         } catch (error) {
             console.error("Fetch error:", error);
-            console.log(error.response);
+            setErrorMessage("Error fetching data. Please try again.");
             setIsLoading(false);
-            displayErrorMessage("Error fetching data. please try again.")
         }
     }
 
@@ -88,22 +75,12 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            const addedData = await response.json();
-            displaySuccessMessage("Todo added successfully!");
+            setSuccessMessage("Todo added successfully!");
             fetchData();
-            // setTodoList(prevTodoList => [
-            //     ...prevTodoList,
-            //     {
-            //         id: addedData.id,
-            //         title: addedData.fields.title,
-            //         isCompleted: false
-            //     }
-            // ]);
         } catch (error) {
             console.error("Fetch error:", error);
             console.log(error.response);
-            setIsLoading(false);
-            displayErrorMessage("Error adding todo. Please try again.");
+            setErrorMessage("Error adding todo. Please try again.");
         }
     };
       
@@ -140,14 +117,13 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            displaySuccessMessage("Todo updated successfully!");
+            setSuccessMessage("Todo updated successfully!");
+            fetchData();
         } catch (error) {
             console.error("Error updating completion status:", error);
             console.log(error.response);
-            setTodoList(todoList.map(todo =>
-                todo.id === id ? { ...todo, isCompleted: !newIsCompletedStatus } : todo
-            ));
-        }
+            setErrorMessage("Error updating todo. Please try again.");
+        };
     };
     const removeTodo = async (id) => {
         const updatedTodoList = todoList.filter(todo => todo.id !== id);
@@ -166,12 +142,12 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            displaySuccessMessage("Todo updated successfully!");
+            setSuccessMessage("Todo updated successfully!");
+            fetchData();
         } catch (error) {
             console.error("Error deleting todo item:", error);
             console.log(error.response);
-            setTodoList(todoList);
-            displayErrorMessage("Error updating todo. Please try again.");
+            setErrorMessage("Error removing todo: " + error.message);
         }
     }
     
@@ -179,14 +155,18 @@ const TodoContainer = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [sortField, sortOrder]);
+    
+    const resetErrorMessage = () => setErrorMessage('');
+    const resetSuccessMessage = () => setSuccessMessage('');
 
     return (
         <section>
-            {errorMessage && <p className="message error">{errorMessage}</p>}
-            {successMessage && <p className="message success">{successMessage}</p>}
+            {errorMessage && (
+                <AlertMessage type="error" message={errorMessage} resetMessage={resetErrorMessage} />
+            )}
+            {successMessage && (
+                <AlertMessage type="success" message={successMessage} resetMessage={resetSuccessMessage} />
+            )}
             <AddTodoForm onAddTodo={addTodo} />
             <div className="tasksHeader">
                 <h2 className="tasksTitle">Tasks</h2>
@@ -195,15 +175,20 @@ const TodoContainer = () => {
                         <option value="title">Title</option>
                         <option value="dueDate">Due Date</option>
                     </select>
-                    <button onClick={toggleSortOrder} className="sortButton">
+                    <button onClick= {toggleSortOrder} className="sortButton">
                         {sortOrder === 'asc' ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
                     </button>
                 </div>
             </div>
-            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} onToggleTodoCompletion={toggleTodoCompletion} />}
+            {isLoading ? <p>Loading...</p> : (
+                <TodoList 
+                    todoList={todoList} 
+                    onRemoveTodo={removeTodo} 
+                    onToggleTodoCompletion={toggleTodoCompletion}
+                />
+            )}
         </section>
     );
 };
-
 
 export default TodoContainer;

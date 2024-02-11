@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import InputWithLabel from './InputWithLabel';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import AlertMessage from './AlertMessage';
 
 const AddTodoForm = ({ onAddTodo }) => { 
     const [todoTitle, setTodoTitle] = useState('');
@@ -11,10 +12,12 @@ const AddTodoForm = ({ onAddTodo }) => {
 
     const handleTitleChange = (event) => {
         setTodoTitle(event.target.value);
+        setError('');
     };
 
     const handleDueDateChange = (date) => {
         setDueDate(date);
+        setError('');
     };
 
     const handleAddTodo = (event) => {
@@ -35,7 +38,7 @@ const AddTodoForm = ({ onAddTodo }) => {
 
     return (
         <form onSubmit={handleAddTodo} className="addTodoForm">
-            {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+            {error && <AlertMessage type="error" message={error} resetMessage={() => setError('')} />}
             <div className="formControls">
                 <InputWithLabel
                     id="todoTitle"
@@ -60,6 +63,7 @@ const AddTodoForm = ({ onAddTodo }) => {
 
 AddTodoForm.propTypes = {
     onAddTodo: PropTypes.func.isRequired,
+    onError: PropTypes.func,
   };
 
 export default AddTodoForm;
