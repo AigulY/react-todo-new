@@ -11,6 +11,7 @@ const TodoContainer = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [sortField, setSortField] = useState('title');
 
     const displayErrorMessage = (message) => {
         setErrorMessage(message);
@@ -34,8 +35,8 @@ const TodoContainer = () => {
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=title&sort[0][direction]=asc`;
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?view=Grid%20view`;
             // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=dueDate&sort[0][direction]=${sortOrder}`;
-
+            // const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=dueDate&sort[0][direction]=${sortOrder}`;
+            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=${sortField}&sort[0][direction]=${sortOrder}`;
         try {
             const response = await fetch(url, options);
 
@@ -56,16 +57,18 @@ const TodoContainer = () => {
 
         } catch (error) {
             console.error("Fetch error:", error);
+            console.log(error.response);
             setIsLoading(false);
             displayErrorMessage("Error fetching data. please try again.")
         }
     }
 
     const addTodo = async (newTodoTitle, newDueDate) => {
+        const formattedDueDate = newDueDate ? newDueDate.toISOString().split('T')[0] : null;
         const newTodoData = {
             fields: {
                 title: newTodoTitle,
-                dueDate: newDueDate
+                dueDate: formattedDueDate,
             },
         };
     
@@ -98,6 +101,7 @@ const TodoContainer = () => {
             // ]);
         } catch (error) {
             console.error("Fetch error:", error);
+            console.log(error.response);
             setIsLoading(false);
             displayErrorMessage("Error adding todo. Please try again.");
         }
@@ -139,7 +143,7 @@ const TodoContainer = () => {
             displaySuccessMessage("Todo updated successfully!");
         } catch (error) {
             console.error("Error updating completion status:", error);
-
+            console.log(error.response);
             setTodoList(todoList.map(todo =>
                 todo.id === id ? { ...todo, isCompleted: !newIsCompletedStatus } : todo
             ));
@@ -165,6 +169,7 @@ const TodoContainer = () => {
             displaySuccessMessage("Todo updated successfully!");
         } catch (error) {
             console.error("Error deleting todo item:", error);
+            console.log(error.response);
             setTodoList(todoList);
             displayErrorMessage("Error updating todo. Please try again.");
         }
@@ -176,29 +181,29 @@ const TodoContainer = () => {
 
     useEffect(() => {
         fetchData();
-    }, [sortOrder]);
+    }, [sortField, sortOrder]);
 
     return (
         <section>
             {errorMessage && <p className="message error">{errorMessage}</p>}
             {successMessage && <p className="message success">{successMessage}</p>}
-    
             <AddTodoForm onAddTodo={addTodo} />
-    
             <div className="tasksHeader">
                 <h2 className="tasksTitle">Tasks</h2>
-                <button onClick={toggleSortOrder} className="sortButton">
-                    {sortOrder === 'asc' ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
-                </button>
+                <div>
+                    <select value={sortField} onChange={e => setSortField(e.target.value)} className="selectInput">
+                        <option value="title">Title</option>
+                        <option value="dueDate">Due Date</option>
+                    </select>
+                    <button onClick={toggleSortOrder} className="sortButton">
+                        {sortOrder === 'asc' ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+                    </button>
+                </div>
             </div>
-            {isLoading ? <p>Loading...</p> : 
-                <TodoList 
-                    todoList={todoList} 
-                    onRemoveTodo={removeTodo} 
-                    onToggleTodoCompletion={toggleTodoCompletion}
-                />}
+            {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} onToggleTodoCompletion={toggleTodoCompletion} />}
         </section>
     );
-}
+};
+
 
 export default TodoContainer;

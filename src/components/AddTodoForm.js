@@ -13,8 +13,8 @@ const AddTodoForm = ({ onAddTodo }) => {
         setTodoTitle(event.target.value);
     };
 
-    const handleDueDateChange = (event) => {
-        setDueDate(event.target.value);
+    const handleDueDateChange = (date) => {
+        setDueDate(date);
     };
 
     const handleAddTodo = (event) => {

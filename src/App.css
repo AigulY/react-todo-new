@@ -24,7 +24,8 @@ button {
     border-radius: 0.6rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-right: 3rem 
+    margin-right: 3rem;
+    margin-left: 0.8rem
 }
 
 .tasksHeader {
@@ -34,7 +35,8 @@ button {
     margin: 0 3rem;
     margin-top: 2rem;
     margin-left: 10%;
-    margin-right: 5%;
+    margin-right: 3rem;
+
 }
 
 .tasksTitle {
@@ -49,7 +51,7 @@ button {
     margin-left: 5%; 
 }
 
-.addTodoForm .textInput, .addTodoForm .datePicker {
+.textInput, .datePicker {
     font-size: 1rem;
     padding: 0.9rem; 
     border-radius: 0.8rem;
@@ -93,6 +95,16 @@ button {
 
 .success {
     background-color: #5cb85c; 
+}
+
+.selectInput {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    border: 0.1rem solid #dddddd;
+    cursor: pointer; /* Changes the cursor to indicate it's clickable */
+    background-color: #929191; /* Matches the input field background */
 }
 
 @media (max-width: 600px) {
