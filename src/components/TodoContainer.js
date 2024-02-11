@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
 // import PropTypes from 'prop-types';
@@ -45,7 +47,8 @@ const TodoContainer = () => {
             const todos = data.records.map(record => ({
                 id: record.id,
                 title: record.fields.title,
-                isCompleted: record.fields.isCompleted || false
+                isCompleted: record.fields.isCompleted || false,
+                dueDate: record.fields.dueDate || ''
             }));
             
             setTodoList([...todos]);
@@ -58,10 +61,11 @@ const TodoContainer = () => {
         }
     }
 
-    const addTodo = async (newTodoTitle) => {
+    const addTodo = async (newTodoTitle, newDueDate) => {
         const newTodoData = {
             fields: {
                 title: newTodoTitle,
+                dueDate: newDueDate
             },
         };
     
@@ -83,14 +87,15 @@ const TodoContainer = () => {
             }
             const addedData = await response.json();
             displaySuccessMessage("Todo added successfully!");
-            setTodoList(prevTodoList => [
-                ...prevTodoList,
-                {
-                    id: addedData.id,
-                    title: addedData.fields.title,
-                    isCompleted: false
-                }
-            ]);
+            fetchData();
+            // setTodoList(prevTodoList => [
+            //     ...prevTodoList,
+            //     {
+            //         id: addedData.id,
+            //         title: addedData.fields.title,
+            //         isCompleted: false
+            //     }
+            // ]);
         } catch (error) {
             console.error("Fetch error:", error);
             setIsLoading(false);
@@ -175,15 +180,23 @@ const TodoContainer = () => {
 
     return (
         <section>
+            {errorMessage && <p className="message error">{errorMessage}</p>}
+            {successMessage && <p className="message success">{successMessage}</p>}
+    
             <AddTodoForm onAddTodo={addTodo} />
-            <button onClick={toggleSortOrder}>Sort task by Due Date</button>
+    
+            <div className="tasksHeader">
+                <h2 className="tasksTitle">Tasks</h2>
+                <button onClick={toggleSortOrder} className="sortButton">
+                    {sortOrder === 'asc' ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+                </button>
+            </div>
             {isLoading ? <p>Loading...</p> : 
                 <TodoList 
                     todoList={todoList} 
                     onRemoveTodo={removeTodo} 
                     onToggleTodoCompletion={toggleTodoCompletion}
                 />}
-            {errorMessage && <p>{errorMessage}</p>}
         </section>
     );
 }

@@ -19,6 +19,7 @@ const InputWithLabel = ({ id, type, name, value, onChange, placeholder, children
                 onChange={onChange}
                 placeholder={placeholder}
                 ref={inputRef}
+                className="textInput"
             />
         </>
     );

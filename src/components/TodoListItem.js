@@ -8,6 +8,9 @@ const TodoListItem = ({ item, onRemoveTodo, onToggleTodoCompletion }) => {
             <span className={styles.taskContent}>
                 {item.title}
             </span>
+            <span className={styles.dueDate}>
+                    Due: {item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'Not defined'}
+            </span>
             <div className={styles.actions}>
                 <input 
                     type="checkbox" 
@@ -26,7 +29,8 @@ TodoListItem.propTypes = {
     item: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        isCompleted: PropTypes.bool
+        isCompleted: PropTypes.bool,
+        dueDate: PropTypes.string
     }).isRequired,
     onRemoveTodo: PropTypes.func.isRequired,
     onToggleTodoCompletion: PropTypes.func.isRequired
