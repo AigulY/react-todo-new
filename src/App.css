@@ -45,7 +45,7 @@ button {
 .addTodoForm .formControls {
     display: flex;
     align-items: center;
-    gap: 2%;
+    gap: 1%;
     margin-right: 30%;
     margin-left: 5%; 
 }
@@ -87,7 +87,7 @@ button {
     color: #fff;
     text-align: center;
     max-width: 90%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 0.5rem 0.8rem rgba(0,0,0,0.2);
 }
 
 .error {
@@ -105,21 +105,20 @@ button {
     border-radius: 0.8rem;
     border: 0.1rem solid #dddddd;
     cursor: pointer;
-    background-color: #929191; 
+    background-color: #ddd; 
 }
 
 .statusUpdate {
     display: -ms-inline-flexbox;
     flex-direction:column;
-    align-items: start;
+    align-items: flex-start;
     z-index: 2;
     position:static
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
     body {
-        font-size: 0.9rem; 
-        padding: 1rem; 
+        padding: 1rem;
     }
     
     h1 {
@@ -127,13 +126,35 @@ button {
     }
 
     button {
-        font-size: 0.9rem; 
         padding: 0.7rem 1rem; 
-        margin-left: 0.5rem; 
-        margin-right: 0.5rem;
+        margin: 0.5rem;
+        box-align: center;
+    }
+
+    .addTodoForm button {
+        width: auto; 
+        padding: 0.5rem 1rem;
+        margin: 1rem auto; 
+        display: block;
+    }
+
+    .addTodoForm .formControls {
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 8rem;
+    }
+
+    .addTodoForm .textInput, .addTodoForm .datePicker, .addTodoForm {
+        width: 100%; 
+        margin: 0.5rem 0.5rem;
     }
 
     .message {
         font-size: 0.8rem; 
+    }
+
+    .formControls {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
