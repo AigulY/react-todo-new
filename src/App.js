@@ -35,6 +35,11 @@ function App() {
                         <h1>New Todo List</h1>
                     </header>
                 } />
+                <Route path="/contact" element={
+                    <header>
+                        <h1>Contact information</h1>
+                </header>
+                } />
                 <Route path="/update/:id" element={<TodoUpdateForm/>} />
             </Routes>
         </BrowserRouter>
