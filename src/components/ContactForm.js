@@ -1,6 +1,6 @@
 import React from 'react';
 import emailjs from 'emailjs-com';
-import styles from './ContactPage.module.css'; // Make sure this path is correct
+import styles from './ContactPage.module.css';
 
 const ContactForm = () => {
   const sendEmail = (e) => {
@@ -14,7 +14,7 @@ const ContactForm = () => {
     )
     .then((result) => {
         alert('Message sent successfully!');
-        e.target.reset(); // Resets form fields after successful submission
+        e.target.reset();
     }, (error) => {
         alert('Failed to send the message, please try again.');
     });
