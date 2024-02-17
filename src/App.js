@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Notification from './components/AlertMessage';
 import TodoUpdateForm from './components/TodoUpdateForm';
 import Navbar from './components/Navbar';
+import AddNewTodo from './components/AddNewTodo';
 import './App.css';
 
 function App() {
@@ -30,17 +31,18 @@ function App() {
                     showSuccessNotification={showSuccessNotification} 
                 />
                 } />
-                <Route path="/new" element={
+                {/* <Route path="/new" element={
                     <header>
                         <h1>New Todo List</h1>
                     </header>
-                } />
+                } /> */}
                 <Route path="/contact" element={
                     <header>
                         <h1>Contact information</h1>
                 </header>
                 } />
                 <Route path="/update/:id" element={<TodoUpdateForm/>} />
+                <Route path="/new" element={<AddNewTodo/>} />
             </Routes>
         </BrowserRouter>
     );
