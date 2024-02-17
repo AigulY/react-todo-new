@@ -17,11 +17,10 @@ const AddNewTodo = ({ onAddTodo }) => {
         onAddTodo(title, dueDate); 
         navigate('/');
       }} />
-      <button className="backButton" onClick={handleBack} style={{marginTop: '20px'}}>
+      <button className="backButton" onClick={handleBack} >
         Back
       </button>
     </section>
   );
 };
-
 export default AddNewTodo;
