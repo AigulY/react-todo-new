@@ -1,5 +1,6 @@
 .formGroup {
     display: flex;
+    font-size: 1rem;
     flex-direction: column;
     gap: 0.2rem; 
     margin-bottom: 1rem;

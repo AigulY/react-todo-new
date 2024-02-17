@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Notification from './components/AlertMessage';
 import TodoUpdateForm from './components/TodoUpdateForm';
 import Navbar from './components/Navbar';
-import AddNewTodo from './components/AddNewTodo';
 import ContactPage from './components/ContactForm';
 import './App.css';
 
@@ -34,7 +33,6 @@ function App() {
                 } />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/update/:id" element={<TodoUpdateForm/>} />
-                <Route path="/new" element={<AddNewTodo/>} />
             </Routes>
         </BrowserRouter>
     );

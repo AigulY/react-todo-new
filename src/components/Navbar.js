@@ -10,11 +10,9 @@ const Navbar = () => {
             <Link to="/" className="navbar-todo">Todo List</Link>
             <ul className={`nav-links ${isActive ? "active" : ""}`}>
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/new">New</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
             </ul>
             <div className="hamburger-menu" onClick={() => setIsActive(!isActive)}>
-                <div className="bar"></div>
                 <div className="bar"></div>
                 <div className="bar"></div>
             </div>
