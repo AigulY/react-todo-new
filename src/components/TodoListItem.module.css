@@ -23,6 +23,17 @@
     color: red;
 }
 
+.updateButton {
+    background-color: transparent;
+    border: none;
+    color: #929191;
+    cursor: pointer;
+}
+
+.updateButton:hover {
+    color: #064ee8;
+}
+
 .actions {
     display: flex;
     align-items: center;
@@ -30,4 +41,9 @@
 
 .actions input[type="checkbox"] {
     margin-right: 20%;
+}
+
+.dueDate {
+    margin-left: auto; 
+    margin-right: 10%;
 }

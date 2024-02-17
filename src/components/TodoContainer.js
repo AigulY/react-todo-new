@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import AlertMessage from './AlertMessage'; 
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
-import PropTypes from 'prop-types';
 
 const TodoContainer = () => {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [sortField, setSortField] = useState('title');
 
-    const displayErrorMessage = (message) => {
-        setErrorMessage(message);
-        const timeoutId = setTimeout(() => setErrorMessage(''), 3000);
-        return () => clearTimeout(timeoutId);
-    };
-
-    const displaySuccessMessage = (message) => {
-        setSuccessMessage(message);
-        const timeoutId = setTimeout(() => setSuccessMessage(''), 3000);
-        return () => clearTimeout(timeoutId);
-    }
+    useEffect(() => {
+        fetchData();
+    }, [sortField, sortOrder]);
 
     const fetchData = async () => {
         const options = {
@@ -28,8 +24,7 @@ const TodoContainer = () => {
                 Authorization:`Bearer ${process.env.REACT_APP_AIRTABLE_API_TOKEN}`
             }};
 
-            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-
+            const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}?sort[0][field]=${sortField}&sort[0][direction]=${sortOrder}`;
         try {
             const response = await fetch(url, options);
 
@@ -38,26 +33,29 @@ const TodoContainer = () => {
             }
             const data = await response.json();                                                                                                                                                                                                            
 
-            const todos = data.records ? data.records.map((record) => ({
+            const todos = data.records.map(record => ({
                 id: record.id,
                 title: record.fields.title,
-                isCompleted: record.fields.isCompleted || false
-            })) : [];
+                isCompleted: record.fields.isCompleted || false,
+                dueDate: record.fields.dueDate || ''
+            }));
             
             setTodoList([...todos]);
             setIsLoading(false);
 
         } catch (error) {
             console.error("Fetch error:", error);
+            setErrorMessage("Error fetching data. Please try again.");
             setIsLoading(false);
-            displayErrorMessage("Error fetching data. please try again.")
         }
     }
 
-    const addTodo = async (newTodoTitle) => {
+    const addTodo = async (newTodoTitle, newDueDate) => {
+        const formattedDueDate = newDueDate ? newDueDate.toISOString().split('T')[0] : null;
         const newTodoData = {
             fields: {
                 title: newTodoTitle,
+                dueDate: formattedDueDate,
             },
         };
     
@@ -77,20 +75,12 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            const addedData = await response.json();
-            displaySuccessMessage("Todo added successfully!");
-            setTodoList(prevTodoList => [
-                ...prevTodoList,
-                {
-                    id: addedData.id,
-                    title: addedData.fields.title,
-                    isCompleted: false
-                }
-            ]);
+            setSuccessMessage("Todo added successfully!");
+            fetchData();
         } catch (error) {
             console.error("Fetch error:", error);
-            setIsLoading(false);
-            displayErrorMessage("Error adding todo. Please try again.");
+            console.log(error.response);
+            setErrorMessage("Error adding todo. Please try again.");
         }
     };
       
@@ -127,14 +117,13 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            displaySuccessMessage("Todo updated successfully!");
+            setSuccessMessage("Todo updated successfully!");
+            fetchData();
         } catch (error) {
             console.error("Error updating completion status:", error);
-
-            setTodoList(todoList.map(todo =>
-                todo.id === id ? { ...todo, isCompleted: !newIsCompletedStatus } : todo
-            ));
-        }
+            console.log(error.response);
+            setErrorMessage("Error updating todo. Please try again.");
+        };
     };
     const removeTodo = async (id) => {
         const updatedTodoList = todoList.filter(todo => todo.id !== id);
@@ -153,30 +142,53 @@ const TodoContainer = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-            displaySuccessMessage("Todo updated successfully!");
+            setSuccessMessage("Todo updated successfully!");
+            fetchData();
         } catch (error) {
             console.error("Error deleting todo item:", error);
-            setTodoList(todoList);
-            displayErrorMessage("Error updating todo. Please try again.");
+            console.log(error.response);
+            setErrorMessage("Error removing todo: " + error.message);
         }
     }
+    
+    const toggleSortOrder = () => {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    
+    const resetErrorMessage = () => setErrorMessage('');
+    const resetSuccessMessage = () => setSuccessMessage('');
 
     return (
         <section>
+            {errorMessage && (
+                <AlertMessage type="error" message={errorMessage} resetMessage={resetErrorMessage} />
+            )}
+            {successMessage && (
+                <AlertMessage type="success" message={successMessage} resetMessage={resetSuccessMessage} />
+            )}
             <AddTodoForm onAddTodo={addTodo} />
-            {isLoading ? <p>Loading...</p> : 
+            <div className="tasksHeader">
+                <h2 className="tasksTitle">Tasks</h2>
+                <div>
+                    <select value={sortField} onChange={e => setSortField(e.target.value)} className="selectInput">
+                        <option value="title">Title</option>
+                        <option value="dueDate">Due Date</option>
+                    </select>
+                    <button onClick= {toggleSortOrder} className="sortButton">
+                        {sortOrder === 'asc' ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+                    </button>
+                </div>
+            </div>
+            {isLoading ? <p>Loading...</p> : (
                 <TodoList 
                     todoList={todoList} 
                     onRemoveTodo={removeTodo} 
                     onToggleTodoCompletion={toggleTodoCompletion}
-                />}
-            {errorMessage && <p>{errorMessage}</p>}
+                />
+            )}
         </section>
     );
-}
+};
 
 export default TodoContainer;

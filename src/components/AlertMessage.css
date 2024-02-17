@@ -1,0 +1,22 @@
+.alertMessage {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    padding: 1rem 2rem;
+    border-radius: 0 0 5px 5px;
+    color: #fff;
+    text-align: center;
+    width: auto;
+    max-width: 90%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.alertMessage.success {
+    background-color: #28a746b4;
+}
+
+.alertMessage.error {
+    background-color: #dc3546a7;
+}
