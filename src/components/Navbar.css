@@ -1,0 +1,78 @@
+.navbar {
+  width: 100%;
+  margin: 0 auto;
+  position: fixed;
+  top: 7%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.1rem 0.2rem;
+  background-color: #333;
+  color: #fff;
+  transition: top 0.3s;
+  border: 0.1rem solid #ddd;
+}
+
+.navbar-todo {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size:large;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  padding: 0 3rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+}
+
+.nav-links li {
+  padding: 0 3rem;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.hamburger-menu {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger-menu .bar {
+  display: block;
+  width: 3rem;
+  height: 0.5rem;
+  margin: 0.5rem;
+  background-color: #fff;
+}
+
+@media (max-width: 1000px) {
+  .nav-links {
+    position: absolute;
+    right: 0;
+    height: 20vh;
+    top: 3rem;
+    background-color: #9291918b;
+    flex-direction: column;
+    width: 20vh;
+    display: none;
+    font-size:large;
+    gap:1rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hamburger-menu {
+    display: block;
+    margin-right: 1%; 
+  }
+}

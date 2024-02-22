@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import AlertMessage from './AlertMessage';
+import styles from './TodoUpdateForm.module.css';
 
 const TodoUpdateForm = () => {
     const { id } = useParams();
@@ -80,38 +81,45 @@ const TodoUpdateForm = () => {
     };
 
     return (
-      <section>
-          {errorMessage && (
-              <AlertMessage type="error" message={errorMessage} resetMessage={() => setErrorMessage('')} />
-          )}
-          <form onSubmit={handleSave} className="updateTodoForm formControls">
-              <input
-                  type="text"
-                  className="textInput"
-                  value={todo.title}
-                  onChange={(e) => setTodo({...todo, title: e.target.value})}
-                  placeholder="Todo Title"
-              />
-              <DatePicker
-                  className="datePicker"
-                  selected={todo.dueDate}
-                  onChange={(date) => setTodo({...todo, dueDate: date})}
-                  dateFormat="MM/dd/yyyy"
-                  placeholderText="Select a due date"
-              />
-              <label>
-                  Completed:
-                  <input
-                      className="statusUpdate"
-                      type="checkbox"
-                      checked={todo.isCompleted}
-                      onChange={(e) => setTodo({...todo, isCompleted: e.target.checked})}
-                  />
-              </label>
-              <button type="submit" className="button">Save</button>
-          </form>
-      </section>
-  );
+        <section className={styles.updateSection}>
+            {errorMessage && <AlertMessage type="error" message={errorMessage} resetMessage={() => setErrorMessage('')} />}
+            <form onSubmit={handleSave} className={styles.updateTodoForm}>
+                <div className={styles.formGroup}>
+                    <input
+                        type="text"
+                        className={styles.textInput} 
+                        value={todo.title}
+                        onChange={(e) => setTodo({...todo, title: e.target.value})}
+                        placeholder="Todo Title"
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <DatePicker
+                        className={styles.datePicker} 
+                        selected={todo.dueDate}
+                        onChange={(date) => setTodo({...todo, dueDate: date})}
+                        dateFormat="MM/dd/yyyy"
+                        placeholderText="Select a due date"
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label className={styles.statusLabel}>
+                        Completed:
+                        <input
+                            type="checkbox"
+                            className={styles.checkbox} 
+                            checked={todo.isCompleted}
+                            onChange={(e) => setTodo({...todo, isCompleted: e.target.checked})}
+                        />
+                    </label>
+                </div>
+                <div className={styles.formActions}>
+                    <button type="submit" className={styles.saveButton}>Save</button>
+                    <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>Back</button>
+                </div>
+            </form>
+        </section>
+    );
 };
-
+  
 export default TodoUpdateForm;

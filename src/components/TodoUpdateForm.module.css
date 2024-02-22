@@ -1,0 +1,84 @@
+.updateSection {
+    padding: 0.5rem;
+}
+
+.updateTodoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+.textInput, 
+.datePicker {
+    width: 70%;
+    align-items: center;
+    margin: 0.5rem auto;
+    display: block;
+    font-size: 1rem;
+    padding: 1rem; 
+    border-radius: 0.8rem;
+    border: 0.1rem solid #ddd;
+    flex: 1;
+}
+
+.statusLabel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 12rem;
+}
+
+.checkbox {
+    margin-left: 2rem;
+}
+
+.formActions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: auto;
+}
+
+.saveButton,
+.backButton {
+    padding: 0.7rem 2rem; 
+    border: none; 
+    color: #fff;
+    background-color: #064ee8;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-items: center;
+}
+
+.backButton {
+    background-color: #ddd; 
+    color: #000;
+}
+
+@media (max-width: 1000px) {
+    .updateSection {
+        margin-top: 10rem;
+    }
+
+    .inputGroup input,
+    .inputGroup .datePicker {
+        width: calc(100% - 1rem); 
+        margin: 0.5rem;
+    }
+
+    .formActions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .formActions button {
+        width: auto; 
+    }
+}

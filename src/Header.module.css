@@ -1,10 +1,9 @@
 .header {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: center; 
+    align-items: center; 
     background-color: #b8b8b9;
-    padding: 3rem 1rem;
-    border: 0.2rem solid #e1e1e1;
+    padding: 0.5rem 1rem;
     position: fixed;
     width: 100%;
     top: 0;
@@ -12,10 +11,15 @@
     z-index: 100;
 }
 
-.header h1 {
-    margin: 0;
-    color: #333;
-    font-size: 3.5rem;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+.logo {
+    height: 3.1rem;
+    width: auto;
+}
+
+.todo-text {
+    margin-left: auto; 
+    color: #333; 
+    font-size: 1.5rem; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: bold;
 }
